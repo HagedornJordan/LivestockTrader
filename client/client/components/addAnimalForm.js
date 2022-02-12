@@ -26,6 +26,9 @@ const AddAnimalForm = () => {
       .request({
         url: "http://localhost:3000/addAnimal",
         method: "post",
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
         //withCredentials: true,
         data: {
           animal: formFields.animal,
@@ -33,6 +36,7 @@ const AddAnimalForm = () => {
           title: formFields.title,
           description: formFields.description,
           age: formFields.age,
+          image: "",
         },
       })
       .then((res) => {
@@ -40,6 +44,7 @@ const AddAnimalForm = () => {
       });
   };
   const handleChange = (e) => {
+    console.log(e);
     setFormFields({
       ...formFields,
       [e.target.id]: e.target.value,
@@ -52,22 +57,27 @@ const AddAnimalForm = () => {
     });
   };
   return (
-    <div className="flex flex-row flex-wrap justify-evenly">
-      <div className="m-auto">
+    <div className="flex flex-col flex-wrap content-start">
+      <div className="ml-5 m-auto border">
         <h1> Add new animal</h1>
         <form onSubmit={handleSubmit}>
           <div className="w-full">
             <label htmlFor="animal">Animal</label>
-            <Select options={animals} onChange={handleSelectChange}></Select>
+            <Select
+              id="animal"
+              options={animals}
+              onChange={handleSelectChange}
+            ></Select>
           </div>
           {inputs.map((input) => {
             return (
-              <div className="w-full" key={input + "container"}>
+              <div className="pt-2" key={input + "container"}>
                 <label key={input + "label"} htmlFor={input}>
                   {" "}
                   {input}{" "}
                 </label>
                 <input
+                  className="w-full border"
                   key={input + "input"}
                   id={input}
                   onChange={handleChange}
@@ -75,7 +85,13 @@ const AddAnimalForm = () => {
               </div>
             );
           })}
-          <input className="" type="submit" value="Submit" />
+          <div>
+            <label htmlFor="images">Images</label>
+          </div>
+          <input id="images" type="file" multiple></input>
+          <div className="text-center">
+            <input className="border-2" type="submit" value="Submit" />
+          </div>
         </form>
       </div>
     </div>

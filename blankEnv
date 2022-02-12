@@ -1,0 +1,10 @@
+# This is your mysql instance's root password. 
+MYSQL_PASSWORD=
+
+# This is the hash secret for bcrypt. 
+SESSION_SECRET=
+
+# These are arbitrary, and are used to seed an admin into the database.
+ADMIN_EMAIL=
+ADMIN_USERNAME=
+ADMIN_PASSWORD=

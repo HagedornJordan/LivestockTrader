@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "createDB" :"node -e \"require('./db').createInitialDatabase()\"",
+    "initDB" : "node -e \"require('./db').initializeDatabase()\"",
+    "resetDB" : "node -e \"require('./db').resetDatabase()\""
   },
   "author": "",
   "license": "ISC",

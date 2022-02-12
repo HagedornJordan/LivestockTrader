@@ -4,20 +4,16 @@ var moment = require("moment");
 const bcryptFunctions = require("./bcrytFunctions");
 
 var connection = mysql.createConnection({
-  host: "localhost",
-  user: "root",
+  host: process.env.MYSQL_HOST,
+  user: process.env.MYSQL_ROOTUSER,
   password: process.env.MYSQL_PASSWORD,
-  database: "mydb",
+  database: process.env.MYSQL_DB || "mydb"
 });
 
 // open the MySQL connection
-connection.connect((error) => {
+connection.connect(error => {
   if (error) throw error;
   console.log("Successfully connected to the database.");
-});
-connection.connect((err) => {
-  if (err) throw err;
-  //resetDatabase();
 });
 
 const executeQuery = (query, params) => {
@@ -29,8 +25,8 @@ const executeQuery = (query, params) => {
   });
 };
 
-var initializeDatabase = () => {
-  console.log("initalizing");
+const initializeDatabase = () => {
+  console.log("Initalizing");
   connection.query(
     "CREATE TABLE users (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255), email VARCHAR(255), password VARCHAR(255), registerDate DATE, permission INT)",
     (err, res) => {
@@ -61,6 +57,7 @@ var initializeDatabase = () => {
       if (err) throw err;
     }
   );
+  seedAdmin();
 };
 
 const resetDatabase = async () => {
@@ -69,8 +66,10 @@ const resetDatabase = async () => {
   connection.query("DROP TABLE userToRole");
   connection.query("DROP TABLE logs");
   connection.query("DROP TABLE animals");
+  console.log("Tables dropped");
   initializeDatabase();
   seedAdmin();
+  console.log("DB Reinitialized");
 };
 
 const seedAdmin = async () => {
@@ -86,14 +85,14 @@ const seedAdmin = async () => {
   assignRole(admin.insertId, role.insertId);
 };
 
-const userExists = async (username) => {
+const userExists = async username => {
   const res = await executeQuery("SELECT * FROM users WHERE name =?", [
-    username,
+    username
   ]);
   return res.length > 0;
 };
 
-var emailExists = async (email) => {
+var emailExists = async email => {
   const res = await executeQuery("SELECT * FROM users WHERE email =?", [email]);
   return res.length > 0;
 };
@@ -122,9 +121,9 @@ const assignRole = async (userId, roleId) => {
   );
 };
 
-const getUserByUsername = async (username) => {
+const getUserByUsername = async username => {
   const res = await executeQuery("SELECT * FROM users WHERE name=?", [
-    username,
+    username
   ]);
   return res;
 };
@@ -154,7 +153,7 @@ const addAnimal = async (animal, breed, title, description, age) => {
       title,
       age,
       description,
-      false,
+      false
     ]
   );
   console.log(res);
@@ -163,11 +162,12 @@ const addAnimal = async (animal, breed, title, description, age) => {
 
 module.exports = {
   initializeDatabase,
+  resetDatabase,
   userExists,
   emailExists,
   createUser,
   getUserByUsername,
   createLog,
   getLogs,
-  addAnimal,
+  addAnimal
 };

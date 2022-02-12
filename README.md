@@ -14,3 +14,7 @@ Others include
   * [moment](https://momentjs.com/) - Simplifies handling date/time data.
   * [mysql2](https://www.npmjs.com/package/mysql2) - I chose this client over the official mysql client primarily for the promise wrappers, but mysql2 also boasts better performance.    
   
+
+* Client
+  * [Axios](https://axios-http.com/docs/intro) - HTTP client. 
+  * [react-select](https://react-select.com/home) - This made handling domains for `<select>` elements much easier. 

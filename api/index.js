@@ -2,6 +2,18 @@ const express = require("express");
 require("dotenv").config({ path: "../.env" });
 const app = express();
 const port = 3000;
+var fs = require("fs-extra");
+const multer = require("multer");
+const storage = multer.diskStorage({
+  destination: function(req, file, cb) {
+    cb(null, "uploads/");
+  },
+  filename: function(req, file, cb) {
+    const uniqueSuffix = Date.now() + "-";
+    cb(null, req.body.title + "-" + uniqueSuffix + file.originalname);
+  }
+});
+const upload = multer({ storage: storage });
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 var db = require("./db");
@@ -14,7 +26,7 @@ const cors = require("cors");
 app.use(
   cors({
     origin: "http://localhost:8080",
-    credentials: true,
+    credentials: true
   })
 );
 app.use(
@@ -39,7 +51,7 @@ app.post("/login", async (req, res) => {
     if (result) {
       const user = {
         id: userRecord.id,
-        name: userRecord.name,
+        name: userRecord.name
       };
       req.session.user = user;
       console.log("in");
@@ -51,7 +63,7 @@ app.post("/login", async (req, res) => {
 });
 
 app.get("/logout", (req, res) => {
-  req.session.destroy((err) => {
+  req.session.destroy(err => {
     if (err) res.send(errorStatus);
     else res.send(successStatus);
   });
@@ -70,7 +82,7 @@ app.post("/register", async (req, res) => {
         );
         const user = {
           id: result.insertId,
-          name: req.body.username,
+          name: req.body.username
         };
         req.session.user = user;
         req.session.created = 1;
@@ -88,17 +100,23 @@ app.get("/requestLogs", async (req, res) => {
   res.send(allLogs);
 });
 
-app.post("/addAnimal", async (req, res) => {
-  if (req?.session?.user?.name === "admin") {
-    const record = await db.addAnimal(
-      req.body.animal,
-      req.body.breed,
-      req.body.title,
-      req.body.description,
-      req.body.age
-    );
-  }
-  res.send(successStatus);
+app.post("/addAnimal", upload.array("images", 15), async (req, res) => {
+  //if (req?.session?.user?.name === "admin") {
+  const record = await db.addAnimal(
+    req.body.animal,
+    req.body.breed,
+    req.body.title,
+    req.body.description,
+    req.body.age,
+    req.body.sex
+  );
+  console.log(record);
+  var currPath = "./uploads/";
+  var newPath = "./processed/" + record.insertId + "/";
+  fs.copy(currPath, newPath, err => {
+    if (err) throw err;
+    else res.send(successStatus);
+  });
 });
 
 app.listen(port, () => {

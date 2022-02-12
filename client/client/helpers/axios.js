@@ -7,17 +7,14 @@ const axiosInstance = axios.create({
   baseURL: "http://localhost:3000/",
   timeout: 5000,
   withCredentials: true,
-  headers: {
-    "Content-Type": "application/json",
-    Accept: "application/json",
-  },
+  headers: { "Content-Type": "application/json" }
 });
 
 export const sendRequest = async (url, method) => {
   const res = await axiosInstance.request({
     url: url,
     method: method,
-    withCredentials: true,
+    withCredentials: true
   });
   console.log(res);
   return res;

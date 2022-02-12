@@ -1,11 +1,13 @@
 import React, { Component } from "react";
 import Select from "react-select";
+import axios from "axios";
+
 const animals = [
   { value: "goat", label: "Goat" },
   { value: "cow", label: "Cow" },
-  { value: "sheep", label: "Sheep" },
+  { value: "sheep", label: "Sheep" }
 ];
-const inputs = ["breed", "title", "description", "age"];
+const inputs = ["breed", "title", "description", "age", "sex"];
 import axiosInstance from "../helpers/axios";
 import { useState, useEffect } from "react";
 import { formatWithValidation } from "next/dist/shared/lib/utils";
@@ -16,44 +18,42 @@ const initial = Object.freeze({
   title: "",
   description: "",
   age: "",
+  sex: ""
 });
 const AddAnimalForm = () => {
   const [formFields, setFormFields] = useState(initial);
+  const [formFiles, setFormFiles] = useState([]);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async event => {
+    console.log(formFiles);
     event.preventDefault();
-    axiosInstance
-      .request({
-        url: "http://localhost:3000/addAnimal",
-        method: "post",
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-        //withCredentials: true,
-        data: {
-          animal: formFields.animal,
-          breed: formFields.breed,
-          title: formFields.title,
-          description: formFields.description,
-          age: formFields.age,
-          image: "",
-        },
-      })
-      .then((res) => {
-        if (res.data.status == "SUCCESS");
-      });
+    const headerConfig = { "Content-Type": "multipart/form-data" };
+    let fd = new FormData();
+    for (let [fieldName, fieldValue] of Object.entries(formFields)) {
+      fd.append(fieldName, fieldValue);
+    }
+    for (let file of formFiles) {
+      fd.append("images", file);
+    }
+
+    axios.post("http://localhost:3000/addAnimal", fd, headerConfig);
   };
-  const handleChange = (e) => {
+
+  const handleChange = e => {
     console.log(e);
     setFormFields({
       ...formFields,
-      [e.target.id]: e.target.value,
+      [e.target.id]: e.target.value
     });
   };
-  const handleSelectChange = (selected) => {
+
+  const handleFilesChange = e => {
+    setFormFiles([...formFiles, e.target.files[0]]);
+  };
+  const handleSelectChange = selected => {
     setFormFields({
       ...formFields,
-      ["animal"]: selected.label,
+      ["animal"]: selected.label
     });
   };
   return (
@@ -67,14 +67,13 @@ const AddAnimalForm = () => {
               id="animal"
               options={animals}
               onChange={handleSelectChange}
-            ></Select>
+            />
           </div>
-          {inputs.map((input) => {
+          {inputs.map(input => {
             return (
               <div className="pt-2" key={input + "container"}>
                 <label key={input + "label"} htmlFor={input}>
-                  {" "}
-                  {input}{" "}
+                  {" "}{input}{" "}
                 </label>
                 <input
                   className="w-full border"
@@ -88,7 +87,13 @@ const AddAnimalForm = () => {
           <div>
             <label htmlFor="images">Images</label>
           </div>
-          <input id="images" type="file" multiple></input>
+          <input
+            id="images"
+            name="images"
+            type="file"
+            multiple
+            onChange={handleFilesChange}
+          />
           <div className="text-center">
             <input className="border-2" type="submit" value="Submit" />
           </div>

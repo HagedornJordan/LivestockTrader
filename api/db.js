@@ -52,7 +52,7 @@ const initializeDatabase = () => {
     }
   );
   connection.query(
-    "CREATE TABLE animals (id INT AUTO_INCREMENT PRIMARY KEY, dateAdded DATE, dateAvailable DATE, type VARCHAR(255), breed VARCHAR(255), title VARCHAR(255), age VARCHAR(255), description VARCHAR(255), isMale BOOLEAN)",
+    "CREATE TABLE animals (id INT AUTO_INCREMENT PRIMARY KEY, dateAdded DATE, dateAvailable DATE, type VARCHAR(255), breed VARCHAR(255), title VARCHAR(255), age VARCHAR(255), description VARCHAR(255), sex VARCHAR(255))",
     (err, res) => {
       if (err) throw err;
     }
@@ -141,10 +141,10 @@ const getLogs = async () => {
   return res;
 };
 
-const addAnimal = async (animal, breed, title, description, age) => {
+const addAnimal = async (animal, breed, title, description, age, sex) => {
   var mysqlTimestamp = moment(Date.now()).format("YYYY-MM-DD HH:mm:ss");
   const res = await executeQuery(
-    "INSERT INTO animals(dateAdded, dateAvailable, type, breed, title, age, description, isMale) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+    "INSERT INTO animals(dateAdded, dateAvailable, type, breed, title, age, description, sex) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
     [
       mysqlTimestamp,
       mysqlTimestamp,
@@ -153,7 +153,7 @@ const addAnimal = async (animal, breed, title, description, age) => {
       title,
       age,
       description,
-      false
+      sex
     ]
   );
   console.log(res);

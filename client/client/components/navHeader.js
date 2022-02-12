@@ -4,24 +4,11 @@ import Link from "next/link";
 const NavHeader = (props) => {
   const username = props.user;
   return (
-    <div className="flex justify-between min-w-full pl-4 pb-3 mb-5 bg-primary">
+    <div className="flex justify-start min-w-full pl-4 pb-3 mb-5 bg-primary border-b-2">
       <h1 className=" font-sans text-2xl font-semibold subpixel-antialiased pr-5">
-        {" "}
-        Template
+        Livestock Trader
       </h1>
-      <div className="justify-self-beginning">
-        <Link href="/adminDashboard"> Admin</Link>
-      </div>
-      <div className="justify-self-end pr-4">
-        {username && (
-          <div>
-            <h1 className=" font-sans text-1xl font-semibold subpixel-antialiased">
-              Hello, {username}
-            </h1>
-            <button onClick={logout}> Logout </button>
-          </div>
-        )}
-      </div>
+      <Link href="/forSale"> Listings</Link>
     </div>
   );
 };

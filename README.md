@@ -21,7 +21,7 @@ Others include
 
 # Start Developing
 
-If you don't already have MySQL, you'll need to install it or swap out the DB code for the database of your choosing. When installing MySQL, I recommend using the MySQL Workbench as it makes it very easy to view your data. During the installation, take care to note the root username and password, as you'll need to add this to your .env file (instructions below). 
+If you don't already have MySQL, you'll need to install it or swap out the DB code for the database of your choosing. When installing MySQL, I recommend using the MySQL Workbench as it makes it very easy to view your data. During the installation, take care to note the root username and password, as you'll need to add this to your .env file (instructions below). Also, create a scheme (database) and add the name to your .env file. If you have issues with the workbench starting the server after reboot, follow the adice in [this thread](https://stackoverflow.com/questions/32022580/failed-to-connect-to-mysql-at-localhost3306-with-user-root/62200315#62200315).
 1. Clone this repo `git clone https://github.com/HagedornJordan/LivestockTrader`
 2. Install client dependencies
     1. Navigate to `client/client/`
@@ -30,7 +30,7 @@ If you don't already have MySQL, you'll need to install it or swap out the DB co
    1. Navigate to `api/`
    2. Run `npm install`
 4. Configure your .env file
-    1. Rename the skeleton .env at the root of this repo. `mv blankEnv .env`
+    1. Rename the skeleton .env at the root of this repo. `mv blankEnv .env`. Remember, you don't want to share this file, so don't modify the .gitignore entry that prevents this from being committed. 
     2. Fill out .env with your parameters.
-5. From `api`, run the database initializer function `db.js::initializeDatabase()`
-6. Any time you'd like to reset your DB, run `db.js::resetDatabase()`
+5. From `api`, run the database initializer function `npm run initiDB`
+6. Any time you'd like to reset your DB, run `npm run resetDB`

@@ -15,12 +15,33 @@ const AdminDashboard = (props) => {
     }
   });
 
+  const onAnimalAdded = () =>{
+    console.log("hereee");
+    router.replace(router.asPath);
+  }
+
   return (
     <>
       <NavHeader user={props.user} />
-      <AddAnimalForm />
+      <div className="flex flex-row flex-wrap content-start">
+      <AddAnimalForm onSubmit={onAnimalAdded}/>
+      <div> 
+        {props.animals && props.animals.map(animal=>{
+          return (<p className="ring-1 p-3 m-2"> {animal.id} , {animal.type}, {animal.breed} </p>)
+        })}
+      </div>
+      </div>
     </>
   );
 };
+
+export async function getServerSideProps() {
+  const response = await fetch("http://localhost:3000/animals");
+  console.log(response);
+  const data = await response.json()
+  return { props: { animals: data } }
+  
+}
+
 
 export default AdminDashboard;

@@ -25,8 +25,8 @@ const saltRounds = 10;
 const cors = require("cors");
 app.use(
   cors({
-    origin: "http://localhost:8080",
-    credentials: true
+    origin: "*"
+    //credentials: true
   })
 );
 app.use(
@@ -96,8 +96,24 @@ app.post("/register", async (req, res) => {
 
 app.get("/requestLogs", async (req, res) => {
   const allLogs = await db.getLogs();
-  console.log(allLogs);
   res.send(allLogs);
+});
+
+app.get("/animals", async (req, res) => {
+  const allAnimals = await db.getAnimals();
+  res.send(allAnimals);
+});
+
+app.get("/animalImage/:id/:index", async (req, res) => {
+  var files = await fs.readdirSync(
+    __dirname + "/processed/" + req.params.id + "/"
+  );
+  for (var i in files) {
+    res.sendFile(
+      __dirname + "/processed/" + req.params.id + "/" + files[i] //"/processed/1/c-1644692563626-0f58d310-021e-4175-b1b6-d73be26bac7e"
+    );
+    break;
+  }
 });
 
 app.post("/addAnimal", upload.array("images", 15), async (req, res) => {
@@ -110,13 +126,22 @@ app.post("/addAnimal", upload.array("images", 15), async (req, res) => {
     req.body.age,
     req.body.sex
   );
-  console.log(record);
+  //console.log(record);
   var currPath = "./uploads/";
+  console.log(req.files);
   var newPath = "./processed/" + record.insertId + "/";
-  fs.copy(currPath, newPath, err => {
-    if (err) throw err;
-    else res.send(successStatus);
+  await new Promise(async (resolve, reject) => {
+    for (var i in req.files) {
+      console.log(currPath + "  " + req.files[i].filename);
+      await fs.move(
+        currPath + req.files[i].filename,
+        newPath + req.files[i].filename
+      );
+    }
+    console.log("here?");
+    resolve();
   });
+  res.send(successStatus);
 });
 
 app.listen(port, () => {

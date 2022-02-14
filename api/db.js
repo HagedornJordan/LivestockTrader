@@ -141,6 +141,11 @@ const getLogs = async () => {
   return res;
 };
 
+const getAnimals = async () => {
+  const res = await executeQuery("SELECT * FROM animals");
+  return res;
+};
+
 const addAnimal = async (animal, breed, title, description, age, sex) => {
   var mysqlTimestamp = moment(Date.now()).format("YYYY-MM-DD HH:mm:ss");
   const res = await executeQuery(
@@ -169,5 +174,6 @@ module.exports = {
   getUserByUsername,
   createLog,
   getLogs,
-  addAnimal
+  addAnimal,
+  getAnimals
 };

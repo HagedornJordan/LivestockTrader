@@ -1,18 +1,35 @@
 import NavHeader from "../../components/navHeader";
+import Image from "next/image";
+import Flickity from 'react-flickity-component';
+import "flickity/css/flickity.css";
 
 const Animal = (props) => {
   return (
     <>
       {" "}
+      
       <NavHeader />
-      <div className="flex flex-col">
-        <div className="m-auto">
-          <div>
-            <img src={"/img/goat2.jpg"} alt="pic"></img>
-          </div>
-          <h1> {props.animal.id}</h1>
-          <p> ♂️ </p>
+      
+      <div className="flex flex-row justify-center">
+      <div className="flex flex-col w-full h-full m-2 p-2">
+      <Flickity> 
+            <Image
+            width={350}
+            height={350}
+
+            quality={100}src={"http://localhost:3000/animalImage/" + props.animal.id} alt="pic"></Image>
+            <Image width={350}
+      height={350}
+
+            quality={100}src={"http://localhost:3000/animalImage/2" } alt="pic"></Image>
+
+            </Flickity>
+          <h1 className="self-center"> {props.animal.id}</h1>
+          <h1 className="self-center"> ♂️ </h1>
+
+
         </div>
+
       </div>
     </>
   );

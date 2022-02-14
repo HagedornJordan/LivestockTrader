@@ -20,7 +20,7 @@ const initial = Object.freeze({
   age: "",
   sex: ""
 });
-const AddAnimalForm = () => {
+const AddAnimalForm = props => {
   const [formFields, setFormFields] = useState(initial);
   const [formFiles, setFormFiles] = useState([]);
 
@@ -32,11 +32,12 @@ const AddAnimalForm = () => {
     for (let [fieldName, fieldValue] of Object.entries(formFields)) {
       fd.append(fieldName, fieldValue);
     }
-    for (let file of formFiles) {
+    for (let file of formFiles[0]) {
       fd.append("images", file);
     }
 
     axios.post("http://localhost:3000/addAnimal", fd, headerConfig);
+    props.onSubmit();
   };
 
   const handleChange = e => {
@@ -48,7 +49,8 @@ const AddAnimalForm = () => {
   };
 
   const handleFilesChange = e => {
-    setFormFiles([...formFiles, e.target.files[0]]);
+    console.log(formFiles);
+    setFormFiles([e.target.files]);
   };
   const handleSelectChange = selected => {
     setFormFields({
@@ -57,7 +59,7 @@ const AddAnimalForm = () => {
     });
   };
   return (
-    <div className="flex flex-col flex-wrap content-start">
+    <div className="flex flex-col flex-wrap content-start self-start">
       <div className="ml-5 m-auto border">
         <h1> Add new animal</h1>
         <form onSubmit={handleSubmit}>

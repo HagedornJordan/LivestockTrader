@@ -108,12 +108,20 @@ app.get("/animalImage/:id/:index", async (req, res) => {
   var files = await fs.readdirSync(
     __dirname + "/processed/" + req.params.id + "/"
   );
-  for (var i in files) {
+  let fIndex = parseInt(req.params.index);
+  if (files[fIndex]) {
     res.sendFile(
-      __dirname + "/processed/" + req.params.id + "/" + files[i] //"/processed/1/c-1644692563626-0f58d310-021e-4175-b1b6-d73be26bac7e"
+      __dirname + "/processed/" + req.params.id + "/" + files[fIndex] //"/processed/1/c-1644692563626-0f58d310-021e-4175-b1b6-d73be26bac7e"
     );
-    break;
   }
+});
+
+app.get("/numberOfImages/:id", async (req, res) => {
+  console.log(req.params);
+  var files = await fs.readdirSync(
+    __dirname + "/processed/" + req.params.id + "/"
+  );
+  res.send({ numFiles: files.length });
 });
 
 app.post("/addAnimal", upload.array("images", 15), async (req, res) => {

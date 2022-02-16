@@ -25,8 +25,8 @@ const saltRounds = 10;
 const cors = require("cors");
 app.use(
   cors({
-    origin: "*"
-    //credentials: true
+    origin: "http://localhost:8080",
+    credentials: true
   })
 );
 app.use(

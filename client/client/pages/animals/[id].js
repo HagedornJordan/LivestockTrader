@@ -8,7 +8,7 @@ import { useState, useEffect } from "react";
 const Animal = (props) => {
   const [numImages, setNumImages] = useState(null);
   useEffect(async() => {
-    const data = await fetch("http://localhost:3000/numberOfImages/" + props.animal.id);
+    const data = await fetch(process.env.NEXT_PUBLIC_API_BASE.toString() + "/numberOfImages/" + props.animal.id);
     const res = await data.json()
     console.log(res)
     setNumImages(res.numFiles)
@@ -27,7 +27,7 @@ const Animal = (props) => {
             width={350}
             height={350}
 
-            quality={100}src={"http://localhost:3000/animalImage/" + props.animal.id + "/" + i} alt="pic"></Image>)                      
+            quality={100}src={process.env.NEXT_PUBLIC_API_BASE.toString() + "/animalImage/" + props.animal.id + "/" + i} alt="pic"></Image>)                      
         }
             </Flickity>
           <h1 className="self-center"> {props.animal.id}</h1>
@@ -43,7 +43,7 @@ const Animal = (props) => {
 // This function gets called at build time
 export async function getStaticPaths() {
   // Call an external API endpoint to get posts
-  const res = await fetch("http://localhost:3000/animals");
+  const res = await fetch(process.env.NEXT_PUBLIC_API_BASE.toString() + "/animals");
   const animals = await res.json();
   const paths = animals.map((animal) => ({   
     params: { id: animal.id.toString() },

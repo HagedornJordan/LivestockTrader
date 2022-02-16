@@ -11,10 +11,11 @@ const initialFields = {
 
 const AuthForm = (props) => {
   const [isSignup, setSignup] = useState(false);
-  var requestUrl = "http://localhost:3000/login";
+  console.log(process.env.NEXT_PUBLIC_API_BASE)
+  var requestUrl = process.env.NEXT_PUBLIC_API_BASE.toString() + "/login";
   let fields = initialFields;
   if (isSignup) {
-    requestUrl = "http://localhost:3000/register";
+    requestUrl = process.env.NEXT_PUBLIC_API_BASE.toString() + "/register";
     fields = { ...fields, email: { value: "", valid: true } };
   }
 

@@ -36,7 +36,11 @@ const AddAnimalForm = props => {
       fd.append("images", file);
     }
 
-    axios.post("http://localhost:3000/addAnimal", fd, headerConfig);
+    axios.post(
+      process.env.NEXT_PUBLIC_API_BASE.toString() + "/addAnimal",
+      fd,
+      headerConfig
+    );
     props.onSubmit();
   };
 

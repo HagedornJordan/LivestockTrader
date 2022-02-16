@@ -10,7 +10,12 @@ const AnimalCard = props => {
             layout="fill"
             quality={100}
             objectFit="cover"
-            src={"http://localhost:3000/animalImage/" + props.animal.id + "/0"}
+            src={
+              process.env.NEXT_PUBLIC_API_BASE.toString() +
+              "/animalImage/" +
+              props.animal.id +
+              "/0"
+            }
           />
         </div>
         <h2>

@@ -10,7 +10,7 @@ const ForSale = (props) => {
       <NavHeader />
       {props.animals && <div className="flex flex-row flex-wrap justify-evenly content-between gap-y-5 gap-x-2 ">
         {props.animals.map((animal) => {
-          return <AnimalCard animal={animal} />;
+          return <AnimalCard key={animal.id} animal={animal} />;
         })}
       </div>
 }

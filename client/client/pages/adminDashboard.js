@@ -27,7 +27,7 @@ const AdminDashboard = (props) => {
       <AddAnimalForm onSubmit={onAnimalAdded}/>
       <div> 
         {props.animals && props.animals.map(animal=>{
-          return (<p className="ring-1 p-3 m-2"> {animal.id} , {animal.type}, {animal.breed} </p>)
+          return (<p key={animal.id} className="ring-1 p-3 m-2"> {animal.id} , {animal.type}, {animal.breed} </p>)
         })}
       </div>
       </div>

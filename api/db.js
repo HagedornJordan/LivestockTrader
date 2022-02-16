@@ -161,7 +161,6 @@ const addAnimal = async (animal, breed, title, description, age, sex) => {
       sex
     ]
   );
-  console.log(res);
   return res;
 };
 

@@ -40,7 +40,6 @@ const successStatus = { status: "SUCCESS" };
 const failureStatus = { status: "FAILURE" };
 
 app.get("/", (req, res) => {
-  //db.initializeDatabase();
   res.send("Hello World!");
 });
 
@@ -54,7 +53,6 @@ app.post("/login", async (req, res) => {
         name: userRecord.name
       };
       req.session.user = user;
-      console.log("in");
       res.send(successStatus);
     } else {
       res.send(invalidStatus);
@@ -111,13 +109,12 @@ app.get("/animalImage/:id/:index", async (req, res) => {
   let fIndex = parseInt(req.params.index);
   if (files[fIndex]) {
     res.sendFile(
-      __dirname + "/processed/" + req.params.id + "/" + files[fIndex] //"/processed/1/c-1644692563626-0f58d310-021e-4175-b1b6-d73be26bac7e"
+      __dirname + "/processed/" + req.params.id + "/" + files[fIndex]
     );
   }
 });
 
 app.get("/numberOfImages/:id", async (req, res) => {
-  console.log(req.params);
   var files = await fs.readdirSync(
     __dirname + "/processed/" + req.params.id + "/"
   );
@@ -125,7 +122,6 @@ app.get("/numberOfImages/:id", async (req, res) => {
 });
 
 app.post("/addAnimal", upload.array("images", 15), async (req, res) => {
-  //if (req?.session?.user?.name === "admin") {
   const record = await db.addAnimal(
     req.body.animal,
     req.body.breed,
@@ -134,19 +130,15 @@ app.post("/addAnimal", upload.array("images", 15), async (req, res) => {
     req.body.age,
     req.body.sex
   );
-  //console.log(record);
   var currPath = "./uploads/";
-  console.log(req.files);
   var newPath = "./processed/" + record.insertId + "/";
   await new Promise(async (resolve, reject) => {
     for (var i in req.files) {
-      console.log(currPath + "  " + req.files[i].filename);
       await fs.move(
         currPath + req.files[i].filename,
         newPath + req.files[i].filename
       );
     }
-    console.log("here?");
     resolve();
   });
   res.send(successStatus);

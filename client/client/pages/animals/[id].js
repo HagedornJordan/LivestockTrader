@@ -43,7 +43,7 @@ const Animal = (props) => {
 // This function gets called at build time
 export async function getStaticPaths() {
   // Call an external API endpoint to get posts
-  const res = await fetch(process.env.NEXT_PUBLIC_API_BASE.toString() + "/animals");
+  const res = await fetch("http://18.217.166.236:3000/animals");
   const animals = await res.json();
   const paths = animals.map((animal) => ({   
     params: { id: animal.id.toString() },

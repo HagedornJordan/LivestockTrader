@@ -34,3 +34,5 @@ If you don't already have MySQL, you'll need to install it or swap out the DB co
     2. Fill out .env with your parameters.
 5. From `api`, run the database initializer function `npm run initiDB`
 6. Any time you'd like to reset your DB, run `npm run resetDB`
+
+*Note: If you want to test on other devices on your network, you'll need to add your server's address to next.config.js and swap out all the fetch/axios urls with that address. 

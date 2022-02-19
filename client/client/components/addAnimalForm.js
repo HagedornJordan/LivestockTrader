@@ -8,9 +8,7 @@ const animals = [
   { value: "sheep", label: "Sheep" }
 ];
 const inputs = ["breed", "title", "description", "age", "sex"];
-import axiosInstance from "../helpers/axios";
 import { useState, useEffect } from "react";
-import { formatWithValidation } from "next/dist/shared/lib/utils";
 
 const initial = Object.freeze({
   animal: "",
@@ -36,11 +34,7 @@ const AddAnimalForm = props => {
       fd.append("images", file);
     }
 
-    axios.post(
-      process.env.NEXT_PUBLIC_API_BASE.toString() + "/addAnimal",
-      fd,
-      headerConfig
-    );
+    axios.post("/addAnimal", fd, headerConfig);
     props.onSubmit();
   };
 

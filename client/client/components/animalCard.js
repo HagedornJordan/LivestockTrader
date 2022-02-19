@@ -1,4 +1,3 @@
-import ToolCard from "./toolCard";
 import Image from "next/image";
 
 const AnimalCard = props => {

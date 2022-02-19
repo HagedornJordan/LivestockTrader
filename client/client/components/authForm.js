@@ -11,42 +11,28 @@ const initialFields = {
 
 const AuthForm = (props) => {
   const [isSignup, setSignup] = useState(false);
-  console.log(process.env.NEXT_PUBLIC_API_BASE)
-  var requestUrl = process.env.NEXT_PUBLIC_API_BASE.toString() + "/login";
+  var requestUrl = "/login";
   let fields = initialFields;
   if (isSignup) {
-    requestUrl = process.env.NEXT_PUBLIC_API_BASE.toString() + "/register";
+    requestUrl = "/register";
     fields = { ...fields, email: { value: "", valid: true } };
   }
 
   const [formFields, setFormFields] = useState(fields);
 
-  const storedUser = {
-    name: "",
-    id: "",
-  };
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
     const user = {
       username: formFields.username.value,
       password: formFields.password.value,
       email: formFields.email?.value,
     };
-    event.preventDefault();
+
     if (anyFieldsInvalid()) return;
-    axiosInstance
-      .request({
-        url: requestUrl,
-        method: "post",
-        withCredentials: true,
-        data: {
-          username: user.username,
-          password: user.password,
-          email: user.email,
-        },
-      })
-      .then((res) => {
-        if (res.data.status == "SUCCESS") props.userSetCB(user.username);
-      });
+
+    const res = await axiosInstance.post(requestUrl, user);
+    if (res.data.status == "SUCCESS") props.userSetCB(user.username);
   };
 
   const handleFieldChange = (e) => {

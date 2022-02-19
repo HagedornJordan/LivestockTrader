@@ -1,8 +1,7 @@
 import CenterLayout from "../components/centerLayout";
 import NavHeader from "../components/navHeader";
-import { sendRequest } from "../helpers/axios";
 import { useRouter } from "next/router";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import AddAnimalForm from "../components/addAnimalForm";
 
 const AdminDashboard = (props) => {
@@ -36,9 +35,8 @@ const AdminDashboard = (props) => {
 };
 
 export async function getServerSideProps() {
-  const response = await fetch("http://18.217.166.236:3000/animals");
-  console.log(response);
-  const data = await response.json()
+  const res = await axiosInstance.get("/animals");
+  const data = res.data;
   return { props: { animals: data } }
   
 }
